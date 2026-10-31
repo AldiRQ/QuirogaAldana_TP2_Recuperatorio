@@ -40,6 +40,15 @@ public class PlayerLives : MonoBehaviour
         }
     }
 
+    public void RestoreLives()
+    {
+        currentLives = maxLives;
+
+        livesUI.UpdateLives(currentLives);
+
+        Debug.Log("¡Vidas recuperadas al máximo!");
+    }
+
     private void GameOver()
     {
         player.SetGameOver();

@@ -11,6 +11,8 @@ public class playerController : MonoBehaviour
     public float rotationSpeed = 10f;
     public Transform spawnPoint;
 
+    Transform cameraTransform;
+
     private CharacterController controller;
     private Vector2 moveInput;
     private float verticalVelocity;
@@ -27,6 +29,8 @@ public class playerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+
+        cameraTransform = Camera.main.transform;
     }
 
     void Update()
@@ -50,10 +54,23 @@ public class playerController : MonoBehaviour
         verticalVelocity += Gravity * Time.deltaTime;
 
         // Direccion del movimiento
-        // Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+       // Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        // MOVIMIENTO RELATIVO DE LA CAMARA
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+
+        // EVITAR INCLINACION VERTICAL
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 moveDirection = forward * moveInput.y + right * moveInput.x;
 
         // Invertimos moveInput (-moveInput.x y -moveInput.y) para corregir el modelo volteado
-        Vector3 moveDirection = new Vector3(-moveInput.x, 0f, -moveInput.y);
+        //Vector3 moveDirection = new Vector3(-moveInput.x, 0f, -moveInput.y);
 
 
         // Rotacion del personaje
@@ -65,8 +82,8 @@ public class playerController : MonoBehaviour
         }
 
         // Movimiento original
-        //Vector3 move = moveDirection.normalized;
-        Vector3 move = -moveDirection.normalized;
+        Vector3 move = moveDirection.normalized;
+        //Vector3 move = -moveDirection.normalized;
         move.y = verticalVelocity / Speed;
 
         controller.Move(move * Speed * Time.deltaTime + externalMoveSpeed * Time.deltaTime);
