@@ -23,7 +23,9 @@ public class playerController : MonoBehaviour
 
 
     public Vector3 externalMoveSpeed;
-
+    // nuevo layerMask y rascast
+    public float groundRayDistance = 0.5f;
+    public LayerMask groundLayer;
 
 
     void Start()
@@ -33,12 +35,23 @@ public class playerController : MonoBehaviour
         cameraTransform = Camera.main.transform;
     }
 
+    bool CheckGround()
+    {
+        Vector3 origin = transform.position + controller.center - Vector3.up * (controller.height / 2f) + Vector3.up * 0.2f;
+
+        Debug.DrawRay(origin, Vector3.down * groundRayDistance, Color.green);
+
+        return Physics.Raycast(origin, Vector3.down, groundRayDistance, groundLayer);
+    }
+
+
     void Update()
     {
         if(isDead || gameOver) return;
-        
 
-         bool isGrounded = controller.isGrounded;
+
+        //bool isGrounded = controller.isGrounded;
+        bool isGrounded = CheckGround();
 
         if (isGrounded && verticalVelocity < 0)
         {
@@ -87,6 +100,9 @@ public class playerController : MonoBehaviour
         move.y = verticalVelocity / Speed;
 
         controller.Move(move * Speed * Time.deltaTime + externalMoveSpeed * Time.deltaTime);
+
+
+        
     }
 
 

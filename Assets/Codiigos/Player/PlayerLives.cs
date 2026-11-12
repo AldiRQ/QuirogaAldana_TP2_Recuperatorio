@@ -40,13 +40,16 @@ public class PlayerLives : MonoBehaviour
         }
     }
 
-    public void RestoreLives()
+    public void RestoreOneLife()
     {
-        currentLives = maxLives;
+        if (currentLives >= maxLives)
+            return;
+
+        currentLives++;
 
         livesUI.UpdateLives(currentLives);
 
-        Debug.Log("¡Vidas recuperadas al máximo!");
+        Debug.Log("Vidas recuperadas: " + currentLives);
     }
 
     private void GameOver()

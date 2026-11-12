@@ -26,6 +26,15 @@ public class FloatingEnemy : MonoBehaviour
 
     private float chaseTimer;
 
+    // nuevo aturdimiento con raycast Opcional A
+    private bool isStunned = false;
+
+    private float stunTimer;
+
+    public float stunDuration = 3f;
+
+    public float stunRotationSpeed = 360f;
+
     private Vector3 startPosition;
 
     private Quaternion startRotation;
@@ -44,21 +53,49 @@ public class FloatingEnemy : MonoBehaviour
 
     private void Update()
     {
-        if(isChasing && player != null)
+        if (isStunned)
+        {
+            Stunned();
+            return;
+        }
+
+        if (isChasing && player != null)
         {
             ChasePlayer();
 
-            chaseTimer = Time.deltaTime;
+            chaseTimer -= Time.deltaTime;
 
             if (chaseTimer <= 0)
-            { 
+            {
                 isChasing = false;
+                player = null;
             }
         }
         else
         {
             Patrol();
         }
+    }
+
+    void Stunned()
+    {
+        stunTimer -= Time.deltaTime;
+
+        transform.Rotate(Vector3.up * stunRotationSpeed * Time.deltaTime);
+
+        if (stunTimer <= 0)
+        {
+            isStunned = false;
+        }
+    }
+
+    public void Stun()
+    {
+        isStunned = true;
+        stunTimer = stunDuration;
+
+        isChasing = false;
+        player = null;
     }
 
     void Patrol()
