@@ -79,6 +79,9 @@ public class FloatingEnemy : MonoBehaviour
 
     void Stunned()
     {
+
+        Debug.Log("EL ENEMIGO ESTÁ GIRANDO");
+
         stunTimer -= Time.deltaTime;
 
         transform.Rotate(Vector3.up * stunRotationSpeed * Time.deltaTime);

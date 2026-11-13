@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class GunRaycast : MonoBehaviour
 {
     public float rayDistance = 50f;
+    public float shotRadius = 1f;
 
     public LayerMask layerMask;
 
@@ -79,7 +80,7 @@ public class GunRaycast : MonoBehaviour
         }
 
 
-        if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame && Physics.Raycast(origin, direction, out hit, rayDistance, layerMask))
+        if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame && Physics.SphereCast(origin, shotRadius, direction, out hit, rayDistance, layerMask))
         {
             Debug.Log("Hemos colisionado con: " + hit.collider.gameObject.name);
 
